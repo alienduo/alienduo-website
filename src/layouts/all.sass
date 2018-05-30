@@ -1,0 +1,43 @@
+// 1. Import the initial variables
+@import "~bulma/sass/utilities/initial-variables"
+@import "~bulma/sass/utilities/functions"
+@import '_mixins.scss'
+@import url('https://fonts.googleapis.com/css?family=Bangers:400,700');
+@import url('https://fonts.googleapis.com/css?family=Kalam:400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+@include font-face(KomikaSlim, "../fonts/komika.slim", null, null, ttf);
+@include font-face(KomikaSlick, "../fonts/komika.slick", null, null, ttf);
+@include font-face(Bangers, "../fonts/bangers.regular", null, null, ttf);
+
+// 2. Set your own initial variables
+// Update blue
+$blue: #72d0eb;
+// Add pink and its invert
+$pink: #ffb3b3;
+$pink-invert: #fff;
+// Add a serif family
+$family-serif: "KomikaSlim";
+
+// 3. Set the derived variables
+// Use the new pink as the primary color
+$primary: $pink;
+$primary-invert: $pink-invert;
+// Use the existing orange as the danger color
+$danger: $orange;
+// Use the new serif family
+$family-primary: $family-serif;
+
+// 6. Import the rest of Bulma
+@import "~bulma";
+
+.hero-main
+  @extend .hero
+  background-image: url('/img/hero-main.jpg')
+  background-size: cover
+  background-position: center
+
+.hero-changelog
+  @extend .hero
+  background-image: url('/img/hero-changelog.jpg')
+  background-size: cover
+  background-position: center

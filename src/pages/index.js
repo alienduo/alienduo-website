@@ -1,60 +1,18 @@
 import React from 'react'
 import Link from 'gatsby-link'
+import Img from 'gatsby-image'
+import get from 'lodash/get'
 
-const IndexPage = () => (
+import IndexHeader from '../components/IndexHeader'
+
+class IndexPage extends React.Component {
+  render () {
+    const siteTitle = get(this, 'props.data.site.siteMetadata.title')
+    const posts = get(this, 'props.data.allMarkdownRemark.edges')
+
+    return (
   <div>
-<section className="hero-main is-fullheight">
-  <div className="hero-head">
-    <header className="navbar">
-      <div className="container">
-        <div className="navbar-brand">
-          <figure className="image" style={{ padding: "10px 20px" }}>
-            <img src="/img/alienduo-logo.svg" alt="Alien Duo" />
-          </figure>
-          <span className="navbar-burger burger" data-target="navbarMenuHeroC">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-        </div>
-        <div id="navbarMenuHeroC" className="navbar-menu">
-          <div className="navbar-end">
-            <div className="buttons">
-              <a className="button is-outlined is-dark" href="https://twitter.com/alienduo">
-                Twitter
-              </a>
-              <a className="button is-outlined is-dark" href="https://patreon.com/alienduo">
-                Patreon
-              </a>
-              <a className="button is-outlined is-dark" href="mailto:contact@alienduo.com">
-                Contact
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-  </div>
-
-  <div className="hero-body">
-    <div className="container has-text-centered">
-      <h2 className="subtitle">
-        The Magnificent
-      </h2>
-      <h1 className="title" style={{ color: "yellow", fontFamily: "Bangers", fontSize: "120pt", textShadow: "-5px 0 black, 0 10px red, 10px 0 black, 0 -10px black" }}>
-        Alien <span style={{ color: "blue" }}>Duo</span>
-      </h1>
-      <h1 className="title is-white" style={{ fontSize: "32pt", color: "white", textShadow: "-2px 0 black, 0 2px black, 2px 0 black, 0 -2px black"}}>
-        The first code+creative studio* created by <b>aliens</b>.
-      </h1>
-      <h2 className="subtitle">
-        * Or "startup", but not a boring one :-P
-      </h2>
-    </div>
-  </div>
-
-</section>
-
+    <IndexHeader />
   <section className="section has-background-black has-text-white">
 <div className="container">
     <div className="tile is-ancestor">
@@ -311,6 +269,32 @@ const IndexPage = () => (
 
 </section>
 
+  <section className="section">
+    <div className="container">
+<div className="tile is-ancestor">
+  <div className="tile is-parent">
+        {posts.map(({ node }) => {
+          const title = get(node, 'frontmatter.title') || node.fields.slug
+          return (
+            <div key={node.fields.slug} className="tile is-child is-4">
+              <figure className="image" style={{ maxWidth: "400px"}}>
+                <Img sizes={node.frontmatter.cover.childImageSharp.sizes} />
+              </figure>
+              <h3>
+                <Link style={{ boxShadow: 'none' }} to={node.fields.slug}>
+                  {title}
+                </Link>
+              </h3>
+              <small>{node.frontmatter.date}</small>
+              <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
+            </div>
+          )
+        })}
+    </div>
+    </div>
+    </div>
+  </section>
+
 <footer className="footer has-text-white has-background-black">
   <div className="container">
     <div className="columns">
@@ -356,5 +340,41 @@ const IndexPage = () => (
 
   </div>
 )
+}
+}
 
 export default IndexPage
+
+export const pageQuery = graphql`
+  query IndexQuery {
+    site {
+      siteMetadata {
+        title
+      }
+    }
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+      edges {
+        node {
+          excerpt
+          fields {
+            slug
+          }
+          frontmatter {
+            date(formatString: "DD MMMM, YYYY")
+            title
+            cover {
+              childImageSharp{
+                sizes(
+                  maxWidth: 630,
+                  traceSVG: { background: "#000000", color: "#ffdd57" }
+                ) {
+                    ...GatsbyImageSharpSizes_tracedSVG
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

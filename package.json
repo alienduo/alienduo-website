@@ -11,7 +11,7 @@
     "gatsby-plugin-react-helmet": "^2.0.10",
     "gatsby-plugin-sass": "^1.0.26",
     "gatsby-source-filesystem": "^1.5.36",
-    "gatsby-transformer-remark": "^1.7.41",
+    "gatsby-transformer-remark": "^5.25.1",
     "react-helmet": "^5.2.0",
     "unist-util-filter": "^0.2.1",
     "unist-util-select": "^1.5.0"
